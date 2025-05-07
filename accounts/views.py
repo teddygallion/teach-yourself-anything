@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
-from django.views.decorators.csrf import csrf_exempt
 
 app_name = "accounts"
 
@@ -16,13 +15,12 @@ def signup_view(request):
         form = UserCreationForm()
     return render(request, 'accounts/signup.html', {'form': form})
 
-@csrf_exempt
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # Fall back to JSON payload if form data doesn't exist
         if not username or not password:
             import json
             data = json.loads(request.body)
