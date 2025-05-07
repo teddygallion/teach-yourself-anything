@@ -13,8 +13,11 @@ crewai = "*"
 markdown = "*"
 beautifulsoup4 = "*"
 djangorestframework = "*"
+whitenoise = "*"
 
 [dev-packages]
+gunicorn = "*"
+dj-database-url = "*"
 
 [requires]
 python_version = "3.12"

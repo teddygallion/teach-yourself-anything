@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 from django.urls import reverse_lazy
+import dj_database_url
+
 
 # Load environment variables from the .env file
 load_dotenv()
@@ -59,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'teach_yrself_anything.urls'
@@ -85,10 +88,7 @@ WSGI_APPLICATION = 'teach_yrself_anything.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'teach_yrself_anything'  
-    }
+    'default': dj_database_url.config(default='postgres://localhost')
 }
 
 
