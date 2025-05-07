@@ -1,0 +1,14 @@
+{% extends "learn/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Your Topics</h1>
+<ul>
+    {% for topic in topics %}
+        <li><a href="{% url 'learn:topic_detail' topic.id %}">{{ topic.title }}</a></li>
+    {% empty %}
+        <li>No topics generated yet.</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'learn:topic_generate' %}">Generate a new topic</a>
+{% endblock %}

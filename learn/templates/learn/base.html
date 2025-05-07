@@ -1,0 +1,45 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Platform</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'learn:home' %}">Home</a></li>
+                <li><a href="{% url 'learn:dashboard' %}">Dashboard</a></li>
+                
+                
+                {% if user.is_authenticated %}
+                    <li>Topics:
+                        <ul>
+                            {% for topic in user.topics.all %}
+                                <li><a href="{% url 'learn:topic_detail' topic.id %}">{{ topic.title }}</a></li>
+                            {% empty %}
+                                <li>No topics created.</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endif %}
+
+                <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Teach Yrself Anything</p>
+    </footer>
+</body>
+</html>

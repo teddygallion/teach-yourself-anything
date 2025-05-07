@@ -1,0 +1,16 @@
+
+{% extends "learn/base.html" %}
+
+{% block title %}Home - Teach Yrself Anything{% endblock %}
+
+{% block content %}
+    <h1>Welcome to Teach Yourself Anything</h1>
+
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}!</p>
+        <p><a href="{% url 'learn:dashboard' %}">Go to Dashboard</a></p>
+    {% else %}
+        <p><a href="{% url 'accounts:login' %}">Login</a> or 
+           <a href="{% url 'accounts:signup' %}">Sign Up</a> to get started.</p>
+    {% endif %}
+{% endblock %}
