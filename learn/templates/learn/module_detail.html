@@ -1,0 +1,15 @@
+{% extends "learn/base.html" %}
+{% block title %}{{ module.title }}{% endblock %}
+{% block content %}
+<h1>{{ module.title }}</h1>
+<p>{{ module.description }}</p>
+
+<h2>Lessons</h2>
+<ul>
+    {% for lesson in module.lessons.all %}
+        <li><a href="{% url 'learn:lesson_detail' module.topic.id module.id lesson.id %}">{{ lesson.title }}</a></li>
+    {% empty %}
+        <li>No lessons yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'learn/base.html' %}
+
+{% block content %}
+<h2>Generate a Learning Topic</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label for="prompt">What do you want to learn?</label><br>
+    <textarea name="topic" rows="4" cols="60" placeholder="e.g. Learn the basics of Rust programming..."></textarea><br><br>
+    <button type="submit">Generate</button>
+</form>
+
+{% if error %}
+    <p style="color: red;">{{ error }}</p>
+{% endif %}
+{% endblock %}

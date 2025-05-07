@@ -1,0 +1,27 @@
+{% extends 'learn/base.html' %}
+
+{% block title %}{{ topic.title }} - Topic Detail{% endblock %}
+
+{% block content %}
+    <div class="topic-detail">
+        <h1>{{ topic.title }}</h1>
+        <p><strong>Description:</strong> {{ topic.description }}</p>
+        <div class="content">
+            <h3>Content:</h3>
+            <p>{{ topic.content|linebreaksbr }}</p>  
+        </div>
+
+        <div class="modules">
+            <h2>Modules</h2>
+            {% if modules %}
+                <ul>
+                    {% for module in modules %}
+                        <li><a href="{% url 'learn:module_detail' topic_id=topic.id module_id=module.id %}">{{ module.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No modules available for this topic.</p>
+            {% endif %}
+                </div>
+            </div>
+{% endblock %}
