@@ -36,7 +36,7 @@ LOGIN_REDIRECT_URL = reverse_lazy('learn:dashboard')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['shielded-sea-16754-0ad41b70999b.herokuapp.com']
 
 
 # Application definition
