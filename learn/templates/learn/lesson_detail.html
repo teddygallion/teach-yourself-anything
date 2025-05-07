@@ -1,0 +1,27 @@
+{% extends 'learn/base.html' %}
+
+{% block content %}
+    <h1>{{ lesson.title }}</h1>
+    <div>
+        <h3>Content:</h3>
+        <p>{{ lesson.content }}</p>
+    </div>
+
+    <div>
+        <h3>Resources:</h3>
+        {% if resources %}
+            <ul>
+                {% for resource in resources %}
+                    <li>
+                        <a href="{{ resource.url }}" target="_blank">{{ resource.title }}</a>
+                        {% if resource.source %}
+                            <span>({{ resource.source }})</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No resources available.</p>
+        {% endif %}
+    </div>
+{% endblock %}
