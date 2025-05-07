@@ -16,9 +16,6 @@ staticfiles/
 # Environment variables
 .env
 
-# Pipenv
-Pipfile.lock
-
 # VS Code
 .vscode/
 

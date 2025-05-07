@@ -13,7 +13,9 @@ crewai = "*"
 markdown = "*"
 beautifulsoup4 = "*"
 djangorestframework = "*"
+gunicorn = "*"
 whitenoise = "*"
+dj-database-url = "*"
 
 [dev-packages]
 gunicorn = "*"
