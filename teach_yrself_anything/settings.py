@@ -36,7 +36,7 @@ LOGIN_REDIRECT_URL = reverse_lazy('learn:dashboard')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['shielded-sea-16754-0ad41b70999b.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -86,15 +86,22 @@ WSGI_APPLICATION = 'teach_yrself_anything.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'), 
-        conn_max_age=600, 
-        ssl_require=True
-    )
-}
-
+if 'ON_HEROKU' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=os.getenv('postgres://u6801mdaq84pot:pec642ee9cd8ccac2c6c3246dff46ebe9f193ae1d0e1b58d332c356d74e2a3a73@ccba8a0vn4fb2p.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/d5cn13cirviva7'), 
+            conn_max_age=600, 
+            ssl_require=True
+        )
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'teach_yrself_anything',
+            # The value of 'NAME' should match the value of 'NAME' you replaced.
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

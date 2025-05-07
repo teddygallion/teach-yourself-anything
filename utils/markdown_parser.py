@@ -1,74 +1,70 @@
-from markdown import markdown
-from bs4 import BeautifulSoup
 import re
+import json
+from bs4 import BeautifulSoup
+import markdown
+def parse_learning_path(markdown_content, dry_run=False):
 
-def markdown_to_text(md):
-    html = markdown(md)
-    soup = BeautifulSoup(html, features="html.parser")
-    return soup.get_text()
+    html_content = markdown.markdown(markdown_content)
+    soup = BeautifulSoup(html_content, 'html.parser')
+    
+    result = {
+        'topic': {
+            'title': '',
+            'description': ''
+        },
+        'modules': []
+    }
+    
 
-def parse_roadmap(text):
-    modules = []
-    current_module = None
-    current_lesson = None
+    first_heading = soup.find(['h1', 'h2'])
+    if first_heading:
+        result['topic']['title'] = first_heading.get_text().strip()
 
-    lines = text.splitlines()
-
-    for line in lines:
-        line = line.strip()
-
-        module_match = re.match(r"\*\*Module \d+: (.+)\*\*", line)
-        if module_match:
-            current_module = {
-                "title": module_match.group(1).strip(),
-                "summary": "",
-                "lessons": []
+    for heading in soup.find_all(['h2', 'h3']):
+        if re.match(r'Module \d+:', heading.get_text()):
+            module = {
+                'title': heading.get_text().strip(),
+                'lessons': []
             }
-            modules.append(current_module)
-            current_lesson = None
-            continue
-
-        lesson_match = re.match(r"#### Lesson \d+\.\d+: (.+)", line)
-        if lesson_match and current_module:
-            current_lesson = {
-                "title": lesson_match.group(1).strip(),
-                "content": "",
-                "exercises": [],
-                "resources": []
-            }
-            current_module["lessons"].append(current_lesson)
-            continue
-
-        if current_lesson and line.startswith("1.") or line.startswith("2."):
-            current_lesson["exercises"].append(line)
-            continue
-
-        if current_lesson and ("Book:" in line or "Video:" in line or "Article:" in line):
-            current_lesson["resources"].append(line)
-            continue
-
-
-        if current_module and not current_lesson and line:
-            current_module["summary"] += line + " "
-
-
-        if current_lesson and line:
-            current_lesson["content"] += line + " "
-
-    return modules
-
-
-def preview_learning_path(parsed_data):
-    for module in parsed_data:
-        print(f"\n📦 Module: {module['title']}")
-        print(f"   📝 Summary: {module['summary']}")
-        for lesson in module['lessons']:
-            print(f"\n   🔹 Lesson: {lesson['title']}")
-            print(f"      📚 Content: {lesson['content']}")
-            print(f"      🧠 Exercises:")
-            for exercise in lesson['exercises']:
-                print(f"         - {exercise}")
-            print(f"      🔗 Resources:")
-            for resource in lesson['resources']:
-                print(f"         - {resource}")
-
+            
+            current_node = heading.next_sibling
+            while current_node and not (current_node.name in ['h2', 'h3'] and re.match(r'Module \d+:', current_node.get_text())):
+                if current_node.name == 'h4' and 'Lesson' in current_node.get_text():
+                    lesson = {
+                        'title': current_node.get_text().strip(),
+                        'key_concepts': [],
+                        'exercises': [],
+                        'resources': []
+                    }
+                    
+                    content_node = current_node.next_sibling
+                    while content_node and not (content_node.name in ['h2', 'h3', 'h4']):
+                        if content_node.name == 'ul':
+                            current_section = None
+                            for li in content_node.find_all('li'):
+                                text = li.get_text().strip()
+                                
+                                if 'Key Concepts:' in text:
+                                    current_section = 'key_concepts'
+                                    text = text.replace('Key Concepts:', '').strip()
+                                elif 'Exercises:' in text:
+                                    current_section = 'exercises'
+                                    text = text.replace('Exercises:', '').strip()
+                                elif 'Recommended Resources:' in text or 'Resources:' in text:
+                                    current_section = 'resources'
+                                    text = text.replace('Recommended Resources:', '').replace('Resources:', '').strip()
+                                elif current_section: 
+                                    lesson[current_section].append(text)
+                                
+                        content_node = content_node.next_sibling
+                    
+                    module['lessons'].append(lesson)
+                
+                current_node = current_node.next_sibling
+            
+            result['modules'].append(module)
+    
+    if dry_run:
+        return result
+    else:
+        pass

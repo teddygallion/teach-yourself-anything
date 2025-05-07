@@ -4,7 +4,8 @@
 <h1>Your Topics</h1>
 <ul>
     {% for topic in topics %}
-        <li><a href="{% url 'learn:topic_detail' topic.id %}">{{ topic.title }}</a></li>
+        <li><a href="{% url 'learn:topic_detail' topic.id %}">{{ topic.title }}</a></li><a href="{% url 'learn:edit_topic' topic.pk %}">Edit</a>
+<a href="{% url 'learn:delete_topic_confirm' topic.pk %}">Delete</a>
     {% empty %}
         <li>No topics generated yet.</li>
     {% endfor %}
